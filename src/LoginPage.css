@@ -1,0 +1,64 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(-45deg, #e3eef9, #fafbff, #d3e3f1, #e2effa);
+  background-size: 400% 400%;
+  animation: gradientWaves 6s ease infinite;
+}
+
+.login-form {
+  padding: 20px;
+  border: 1px solid #000;
+  background: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+@keyframes gradientWaves {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Additional styling for input and label if needed */
+input[type="text"] {
+  margin-left: 10px;
+  outline: none;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 10px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: #5c9ecf;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #3b7ca0;
+}
+

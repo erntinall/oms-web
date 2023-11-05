@@ -1,0 +1,46 @@
+/* MainMenu.css */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-bottom: none;
+}
+
+nav ul li {
+  float: left;
+}
+
+nav ul li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border-right: 1px solid #ccc;
+}
+
+nav ul li a:hover {
+  background-color: #ddd;
+}
+
+nav ul li a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Clear floats after the tabs */
+nav:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the tab content */
+.tab-content {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
