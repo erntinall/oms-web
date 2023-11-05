@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMS Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="dashboard">
+    <h1>OMS</h1>
+    <nav>
+      <ul>
+        <li><a href="active-orders.html">Active Orders</a></li>
+        <li><a href="order-history.html">Order History</a></li>
+        <li><a href="inventory.html">Inventory</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div id="welcomeContainer">
+    <div id="welcome">
+        <p>Welcome, <span id="employeeName">Employee</span>!</p>
+    </div>
+  </div>
+  <button id="logout" onclick="logout()">Log-out</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
