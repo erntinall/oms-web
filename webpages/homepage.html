@@ -4,23 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OMS Dashboard</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="dashboard">
-    <h1>OMS</h1>
+    <h1 id="logo">OMS</h1>
     <nav>
       <ul>
-        <li><a href="active-orders.html">Active Orders</a></li>
-        <li><a href="order-history.html">Order History</a></li>
-        <li><a href="inventory.html">Inventory</a></li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#activeOrders">Active Orders</a></li>
+        <li><a href="#orderHistory">Order History</a></li>
+        <li><a href="#inventory">Inventory</a></li>
       </ul>
     </nav>
   </div>
-  <div id="welcomeContainer">
+  <div id="homeContainer" class="content-container">
     <div id="welcome">
-        <p>Welcome, <span id="employeeName">Employee</span>!</p>
+        <p>Welcome, <span id="employeeName">%employeeName%</span>!</p>
     </div>
+  </div>
+  <div id="activeOrdersContainer" class="content-container">
+    <table id="ordersTable">
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Employee ID</th>
+        <th>Address</th>
+      </tr>
+    </table>
+  </div>
+  <div id="orderHistoryContainer" class="content-container">
+    <table id="orderHistoryTable">
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Employee ID</th>
+        <th>Address</th>
+      </tr>
+    </table>
+  </div>
+  <div id="inventoryContainer" class="content-container">
+    <table id="inventoryTable">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Supplier ID</th>
+        <th>Supplier Name</th>
+      </tr>
+    </table>
   </div>
   <button id="logout" onclick="logout()">Log-out</button>
 
