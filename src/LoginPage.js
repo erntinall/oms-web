@@ -14,7 +14,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post('http://3.130.252.18:5000/login', { employeeID });
       console.log('Login successful:', response.data.message);
-      navigate('/main'); // Use navigate to redirect to MainPage.js
+      navigate('/main', {state: {welcomeMessage: response.data.message}}); // Use navigate to redirect to MainPage.js
       
     } catch (error) {
       if (error.response) {

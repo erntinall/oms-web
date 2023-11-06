@@ -38,6 +38,13 @@ nav:after {
   clear: both;
 }
 
+.welcome-message {
+  color: green;
+  font-size: 1.5em;
+  margin-top: 20px;
+  text-align: center;
+}
+
 /* Style the tab content */
 .tab-content {
   padding: 6px 12px;
