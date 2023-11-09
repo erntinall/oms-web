@@ -1,19 +1,16 @@
-// Node.JS with Express and MySQL Query Return Template
 const express = require('express');
 const mysql = require('mysql');
 
 const app = express();
 const port = 3000;
 
-// MySQL connection setup (update with your credentials)
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'your_username',
-  password: 'your_password',
-  database: 'your_database'
+  host: 'localhost:3306',
+  user: 'root',
+  password: 'AbdulFawy23!',
+  database: 'dbsystems'
 });
 
-// Connecting to the database
 connection.connect((err) => {
   if (err) throw err;
   console.log('Connected to the database!');
@@ -26,7 +23,7 @@ app.get('/getEmployeeName', (req, res) => {
     return res.status(400).send('Employee ID is required');
   }
 
-  const query = 'SELECT name FROM employee WHERE id = ?';
+  const query = 'SELECT employeeName FROM employee WHERE employeeID = ?';
   connection.query(query, [employeeID], (err, results) => {
     if (err) {
       return res.status(500).send('Error fetching employee name');

@@ -23,20 +23,20 @@ $(document).ready(function() {
   });
 });
 
-// Name Shower
 $(document).ready(function() {
-  var employeeID = 'the_employee_id';
+  const employeeID = urlParams.get('employeeID');
 
-  $.ajax({
-    url: 'http://3.130.252.18:3000/getEmployeeName',
-    type: 'GET',
-    data: { employeeID: employeeID },
-    success: function(response) {
-      $('#employeeName').text(response.name);
-    },
-    //shows in console
-    error: function(xhr, status, error) {
-      console.error("Error fetching employee name", error);
-    }
-  });
+  if (employeeID) {
+    $.ajax({
+      url: 'http://localhost:3000/getEmployeeName',
+      method: 'GET',
+      data: { employeeID: employeeID },
+      success: function(response) {
+        $('#employeeName').text(response.name);
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching employee name:', error);
+      }
+    });
+  }
 });

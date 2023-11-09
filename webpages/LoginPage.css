@@ -1,0 +1,23 @@
+.login-container {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .login-container h2 {
+    text-align: center;
+  }
+  
+  .login-container form div {
+    margin-bottom: 10px;
+  }
+  
+  .login-container label {
+    display: block;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+  }
+  
