@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation'
 import './MainPage.css';
+import './Table.css';
 
 function Orders() {
 	  const [orders, setOrders] = useState([]);
@@ -28,9 +29,9 @@ function Orders() {
 	  return (
 	    <div>
 	      <Navigation/>
-	      <div className="tab-content">
+	      <div className="tab-content orders-content">
 	      	<h2>Orders List</h2>
-	      	<table>
+	      	<table className="orders-table">
 			<thead>
 		  	<tr>
 		    		<th>Order ID</th>

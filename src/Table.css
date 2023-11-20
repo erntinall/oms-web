@@ -1,0 +1,32 @@
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 2px solid #ccc;
+}
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+tr:nth-child(even) {
+    background-color: #fafafa;
+}
+tr:hover {
+    background-color: #e2e2e2;
+}
+/* Responsive table */
+@media (max-width: 600px) {
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
