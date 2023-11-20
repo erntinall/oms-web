@@ -37,6 +37,9 @@ def get_orders():
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM orders")
     orders = cursor.fetchall()
+    # Convert amount to float before sending it to the frontend
+    for order in orders:
+        order['amount'] = float(order['amount'])
     cursor.close()
     conn.close()
     return jsonify(orders)

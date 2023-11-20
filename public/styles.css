@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+#logo {
+    text-align: center;
+}
+  #dashboard {
+    width: 200px;
+    background-color: #868686;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+    flex-shrink: 0;
+  }
+  
+  #dashboard h1 {
+    margin: 0 0 20px 0;
+  }
+  
+  #dashboard nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #dashboard nav ul li a {
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+    border-radius: 10px;
+  }
+  
+  #dashboard nav ul li a:hover {
+    background-color: #757575;
+  }
+  
+  #logout {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: rgb(66, 66, 66);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  #homeContainer { 
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    padding:60px;
+  }
+  #welcome {
+    padding: 50px;
+    flex-grow: 1;
+  }
+  
+  #welcome p {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    margin: 10%;
+    font-size: 30px;
+    border-radius: 10px;
+    background-color:rgb(209, 207, 207)
+  }
+  table {
+    align-items: center;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  html {
+    height: 100%
+  }
+
+
+  
