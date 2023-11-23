@@ -3,21 +3,21 @@ import Navigation from './Navigation'
 import './MainPage.css';
 import './Table.css';
 
-function Orders() {
-	  const [orders, setOrders] = useState([]);
+function Employees() {
+	  const [employees, setEmployees] = useState([]);
 	  const [error, setError] = useState(null);
 
 	  useEffect(() => {
-	    fetch('http://3.130.252.18:5000/orders')
+	    fetch('http://3.130.252.18:5000/employees')
 	      .then(response => {
 	        if (response.ok) {
 		  return response.json();
 		}
 		throw new Error('Network response was not ok.');
 	      })
-	      .then(data => setOrders(data))
+	      .then(data => setEmployees(data))
 	      .catch(error => {
-	        console.error('Error fetching orders:', error);
+	        console.error('Error fetching Employees:', error);
 		setError(error.message);
 	      });
 	  }, []);
@@ -30,27 +30,21 @@ function Orders() {
 	    <div>
 	      <Navigation/>
 	      <div className="tab-content orders-content">
-	      	<h2>Orders List</h2>
+	      	<h2>Employees</h2>
 	      	<table className="orders-table">
 			<thead>
 		  	<tr>
 		    		<th>ID</th>
-		    		<th>Employee</th>
-		    		<th>Customer</th>
-		    		<th>Order Date</th>
-		    		<th>Amount</th>
-		    		<th>Status</th>
+		    		<th>Name</th>
+		    		<th>Role</th>
 		  	</tr>
 			</thead>
 			<tbody>
-		  	{orders.map(order => (
-		    	<tr key={order.orderID}>
-		      		<td>{order.orderID}</td>
-		      		<td>{order.employeeName}</td>
-		      		<td>{order.customerName}</td>
-		      		<td>{order.orderDate}</td>
-		      		<td>${formatAmount(order.amount)}</td>
-		      		<td>{order.status}</td>
+		  	{employees.map(employee => (
+		    	<tr key={employee.employeeID}>
+				<td>{employee.employeeID}</td>
+		      		<td>{employee.employeeName}</td>
+		      		<td>{employee.employeeRank}</td>
 		    	</tr>
 		  	))}
 		 	</tbody>
@@ -59,9 +53,5 @@ function Orders() {
 	       		</div>
 	      	);
 }
-function formatAmount(amount){
-	return isNaN(amount) ? '0.00' : parseFloat(amount).toFixed(2);
-}
 
-export default Orders;
-
+export default Employees;

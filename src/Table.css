@@ -15,6 +15,7 @@ th {
 td {
     padding: 10px;
     border-bottom: 1px solid #ccc;
+    text-align: center;
 }
 tr:nth-child(even) {
     background-color: #fafafa;

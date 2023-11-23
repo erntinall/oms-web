@@ -3,21 +3,21 @@ import Navigation from './Navigation'
 import './MainPage.css';
 import './Table.css';
 
-function Orders() {
-	  const [orders, setOrders] = useState([]);
+function Shipments() {
+	  const [shipments, setShipments] = useState([]);
 	  const [error, setError] = useState(null);
 
 	  useEffect(() => {
-	    fetch('http://3.130.252.18:5000/orders')
+	    fetch('http://3.130.252.18:5000/shipments')
 	      .then(response => {
 	        if (response.ok) {
 		  return response.json();
 		}
 		throw new Error('Network response was not ok.');
 	      })
-	      .then(data => setOrders(data))
+	      .then(data => setShipments(data))
 	      .catch(error => {
-	        console.error('Error fetching orders:', error);
+	        console.error('Error fetching Shipments:', error);
 		setError(error.message);
 	      });
 	  }, []);
@@ -30,27 +30,23 @@ function Orders() {
 	    <div>
 	      <Navigation/>
 	      <div className="tab-content orders-content">
-	      	<h2>Orders List</h2>
+	      	<h2>Shipments</h2>
 	      	<table className="orders-table">
 			<thead>
 		  	<tr>
 		    		<th>ID</th>
-		    		<th>Employee</th>
-		    		<th>Customer</th>
-		    		<th>Order Date</th>
-		    		<th>Amount</th>
-		    		<th>Status</th>
+		    		<th>Order</th>
+		    		<th>Date Shipped</th>
+		    		<th>Shipment Progress</th>
 		  	</tr>
 			</thead>
 			<tbody>
-		  	{orders.map(order => (
-		    	<tr key={order.orderID}>
-		      		<td>{order.orderID}</td>
-		      		<td>{order.employeeName}</td>
-		      		<td>{order.customerName}</td>
-		      		<td>{order.orderDate}</td>
-		      		<td>${formatAmount(order.amount)}</td>
-		      		<td>{order.status}</td>
+		  	{shipments.map(shipment => (
+		    	<tr key={shipment.shipmentID}>
+		      		<td>{shipment.shipmentID}</td>
+		      		<td>{shipment.orderID}</td>
+		      		<td>{shipment.shipmentDate}</td>
+				<td>{shipment.tracking}</td>
 		    	</tr>
 		  	))}
 		 	</tbody>
@@ -59,9 +55,6 @@ function Orders() {
 	       		</div>
 	      	);
 }
-function formatAmount(amount){
-	return isNaN(amount) ? '0.00' : parseFloat(amount).toFixed(2);
-}
 
-export default Orders;
+export default Shipments;
 

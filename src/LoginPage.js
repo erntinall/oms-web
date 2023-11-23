@@ -22,7 +22,7 @@ const LoginPage = () => {
     }
     try {
       const response = await axios.post('http://3.130.252.18:5000/login', { employeeID, password });
-      if (response.status == 200){
+      if (response.status === 200){
 	console.log('Login successful:', response.data.message);
         navigate('/main', {state: {welcomeMessage: response.data.message}});
         setIsLoggedIn(true);

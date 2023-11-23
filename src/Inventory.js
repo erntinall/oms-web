@@ -3,21 +3,21 @@ import Navigation from './Navigation'
 import './MainPage.css';
 import './Table.css';
 
-function Orders() {
-	  const [orders, setOrders] = useState([]);
+function Inventory() {
+	  const [inventory, setInventory] = useState([]);
 	  const [error, setError] = useState(null);
 
 	  useEffect(() => {
-	    fetch('http://3.130.252.18:5000/orders')
+	    fetch('http://3.130.252.18:5000/inventory')
 	      .then(response => {
 	        if (response.ok) {
 		  return response.json();
 		}
 		throw new Error('Network response was not ok.');
 	      })
-	      .then(data => setOrders(data))
+	      .then(data => setInventory(data))
 	      .catch(error => {
-	        console.error('Error fetching orders:', error);
+	        console.error('Error fetching inventory:', error);
 		setError(error.message);
 	      });
 	  }, []);
@@ -30,27 +30,25 @@ function Orders() {
 	    <div>
 	      <Navigation/>
 	      <div className="tab-content orders-content">
-	      	<h2>Orders List</h2>
+	      	<h2>Inventory</h2>
 	      	<table className="orders-table">
 			<thead>
 		  	<tr>
 		    		<th>ID</th>
-		    		<th>Employee</th>
-		    		<th>Customer</th>
-		    		<th>Order Date</th>
+		    		<th>Description</th>
+		    		<th>Supplier</th>
+		    		<th>Quantity</th>
 		    		<th>Amount</th>
-		    		<th>Status</th>
 		  	</tr>
 			</thead>
 			<tbody>
-		  	{orders.map(order => (
-		    	<tr key={order.orderID}>
-		      		<td>{order.orderID}</td>
-		      		<td>{order.employeeName}</td>
-		      		<td>{order.customerName}</td>
-		      		<td>{order.orderDate}</td>
-		      		<td>${formatAmount(order.amount)}</td>
-		      		<td>{order.status}</td>
+		  	{inventory.map(item => (
+		    	<tr key={item.inventoryID}>
+		      		<td>{item.inventoryID}</td>
+				<td>{item.productName}</td>
+				<td>{item.supplierName}</td>
+				<td>{item.quantity}</td>
+				<td>${typeof item.amount === 'number' ? item.amount.toFixed(2) : '0.00'}</td>
 		    	</tr>
 		  	))}
 		 	</tbody>
@@ -59,9 +57,6 @@ function Orders() {
 	       		</div>
 	      	);
 }
-function formatAmount(amount){
-	return isNaN(amount) ? '0.00' : parseFloat(amount).toFixed(2);
-}
 
-export default Orders;
+export default Inventory;
 

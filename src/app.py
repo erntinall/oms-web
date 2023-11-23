@@ -73,13 +73,21 @@ def change_password():
 def get_orders():
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM orders")
+
+    cursor.execute("""
+        SELECT o.orderID, e.employeeName, c.name as customerName, o.orderDate, o.amount, o.status
+        FROM orders o
+        INNER JOIN employee e ON o.employeeID = e.employeeID
+        INNER JOIN customer c ON o.customerID = c.customerid
+    """)
+
     orders = cursor.fetchall()
     for order in orders:
         order['amount'] = float(order['amount'])
     cursor.close()
     conn.close()
     return jsonify(orders)
+
 @app.route('/order/<int:order_id>', methods=['GET'])
 def get_order(order_id):
     conn = mysql.connector.connect(**config)
@@ -103,6 +111,116 @@ def update_order_status(order_id):
     cursor.close()
     conn.close()
     return jsonify({'message': 'Order status updated'}), 200
+@app.route('/shipments', methods=['GET'])
+def get_shipments():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM shipment")
+    shipments = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(shipments)
+@app.route('/inventory', methods=['GET'])
+def get_inventory():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    # SQL query that joins inventory, product, and supplier tables
+    cursor.execute("""
+        SELECT i.inventoryID, p.productName, s.supplierName, i.quantity, p.price
+        FROM inventory i
+        INNER JOIN product p ON i.productID = p.productID
+        INNER JOIN supplier s ON i.supplierID = s.supplierID
+    """)
+
+    inventory_items = cursor.fetchall()
+
+    # Calculate the amount (price * quantity) and add it to the dictionary
+    for item in inventory_items:
+        item['amount'] = float(item['price']) * int(item['quantity'])
+        
+    cursor.close()
+    conn.close()
+    return jsonify(inventory_items)
+
+@app.route('/customers', methods=['GET'])
+def get_customers():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    #SQL query to get all customers from table
+    cursor.execute("SELECT * FROM customer")
+    customers = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(customers)
+@app.route('/products', methods=['GET'])
+def get_products():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM product")
+
+    products = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(products)
+@app.route('/suppliers', methods=['GET'])
+def get_suppliers():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM supplier")
+
+    suppliers = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(suppliers)
+
+@app.route('/employees', methods=['GET'])
+def get_employees():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM employee")
+
+    employees = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(employees)
+
+@app.route('/payments', methods=['GET'])
+def get_payments():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM payment")
+
+    payments = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(payments)
+
+@app.route('/sChannel', methods=['GET'])
+def get_salesChannel():
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM customersaleschannel")
+
+    cSCs = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify(cSCs)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
