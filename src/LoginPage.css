@@ -31,8 +31,8 @@
   }
 }
 
-/* Additional styling for input and label if needed */
-input[type="text"] {
+input[type="text"],
+input[type=password] {
   margin-left: 10px;
   outline: none;
   border: 1px solid #ccc;
@@ -61,4 +61,11 @@ button {
 button:hover {
   background-color: #3b7ca0;
 }
-
+.change-password-button {
+  font-size: small;
+  margin-left: 10px;
+}
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

@@ -17,11 +17,15 @@ config = {
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    employee_id = data['employeeID']
+    employee_id = data.get('employeeID')
+    password = data.get('password')
+    
+    if not employee_id or not password:
+        return jsonify({'message': 'Employee ID and password are required'}), 400
 
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
-    cursor.execute("SELECT employeeName FROM employee WHERE employeeID = %s", (employee_id,))
+    cursor.execute("SELECT employeeName, password FROM employee WHERE employeeID = %s AND password = %s", (employee_id, password))
     employee = cursor.fetchone()
 
     cursor.close()
@@ -30,7 +34,41 @@ def login():
     if employee:
         return jsonify({'message': f'Welcome {employee[0]}'}), 200
     else:
+        return jsonify({'message': 'Invalid login credentials'}), 401
+@app.route('/change-password', methods=['POST'])
+def change_password():
+    data = request.get_json()
+    employee_id = data.get('employeeID')
+    old_password = data.get('oldPassword')
+    new_password = data.get('newPassword')
+    
+    if not employee_id or not old_password or not new_password:
+        return jsonify({'message': 'All fields are required'}), 400
+    
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT password FROM employee WHERE employeeID = %s", (employee_id,))
+    result = cursor.fetchone()
+
+    if not result:
+        cursor.close()
+        conn.close()
         return jsonify({'message': 'Employee not found'}), 404
+
+    if old_password != result[0]:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Old password is incorrect'}), 401
+
+    cursor.execute("UPDATE employee SET password = %s WHERE employeeID = %s", (new_password, employee_id))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({'message': 'Password changed successfully'}), 200
+
 @app.route('/orders', methods=['GET'])
 def get_orders():
     conn = mysql.connector.connect(**config)
