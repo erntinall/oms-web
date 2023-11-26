@@ -220,7 +220,39 @@ def get_salesChannel():
     cursor.close()
     conn.close()
     return jsonify(cSCs)
+@app.route('/customers/delete/<int:customer_id>', methods=['DELETE'])
+def delete_customer(customer_id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM customer WHERE customerid = %s", (customer_id,))
+        conn.commit()
+        if cursor.rowcount == 0: return jsonify({'message': 'No customer found with given ID'}), 404
+        else: return jsonify({'message': 'Customer deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+    finally:
+        if cursor: cursor.close()
+        if conn: conn.close()
+@app.route('/customers/add', methods=['POST'])
+def add_customer():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    phone = data.get('phone')
 
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO customer (name, email, phone) VALUES (%s, %s, %s)", (name, email, phone))
+        conn.commit()
+        return jsonify({'message': 'Customer added successfully', 'customerid': cursor.lastrowid}), 201
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
