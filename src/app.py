@@ -253,6 +253,28 @@ def add_customer():
     finally:
         cursor.close()
         conn.close()
+@app.route('/customers/update/<int:customer_id>', methods=['PUT'])
+def update_customer(customer_id):
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    phone = data.get('phone')
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("UPDATE customer SET name = %s, email = %s, phone = %s WHERE customerid = %s", (name, email, phone, customer_id))
+        conn.commit()
+
+        if cursor.rowcount == 0: return jsonify({'message': 'Customer not found'}), 404
+        return jsonify({'message': 'Customer updated successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
