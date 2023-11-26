@@ -129,7 +129,7 @@ def get_inventory():
 
     # SQL query that joins inventory, product, and supplier tables
     cursor.execute("""
-        SELECT i.inventoryID, p.productName, s.supplierName, i.quantity, p.price
+        SELECT i.inventoryID, p.productName, s.supplierName, i.quantity
         FROM inventory i
         INNER JOIN product p ON i.productID = p.productID
         INNER JOIN supplier s ON i.supplierID = s.supplierID
@@ -137,10 +137,6 @@ def get_inventory():
 
     inventory_items = cursor.fetchall()
 
-    # Calculate the amount (price * quantity) and add it to the dictionary
-    for item in inventory_items:
-        item['amount'] = float(item['price']) * int(item['quantity'])
-        
     cursor.close()
     conn.close()
     return jsonify(inventory_items)
@@ -273,7 +269,54 @@ def update_customer(customer_id):
     finally:
         cursor.close()
         conn.close()
+@app.route('/inventory/add', methods=['POST'])
+def add_inventory_item():
+    data = request.get_json()
+    product_id = data.get('productID')
+    supplier_id = data.get('supplierID')
+    quantity = data.get('quantity')
 
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO inventory (productID, supplierID, quantity) VALUES (%s, %s, %s)", (product_id, supplier_id, quantity))
+        conn.commit()
+        return jsonify({'message': 'Inventory item added successfully', 'inventoryID': cursor.lastrowid}), 201
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+@app.route('/inventory/update/<int:inventory_id>', methods=['PUT'])
+def update_inventory_item(inventory_id):
+    data = request.get_json()
+    product_id = data.get('productID')
+    supplier_id = data.get('supplierID')
+    quantity = data.get('quantity')
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("UPDATE inventory SET productID = %s, supplierID = %s, quantity = %s WHERE inventoryID = %s", (product_id, supplier_id, quantity, inventory_id))
+        conn.commit()
+        if cursor.rowcount == 0: return jsonify({'message': 'Inventory item not found'}), 404
+        return jsonify({'message': 'Inventory item updated successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+@app.route('/inventory/delete/<int:inventory_id>', methods=['DELETE'])
+def delete_inventory_item(inventory_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM inventory WHERE inventoryID = %s", (inventory_id,))
+        conn.commit()
+        if cursor.rowcount == 0: return jsonify({'message': 'Inventory item not found'}), 404
+        return jsonify({'message': 'Inventory item deleted successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
