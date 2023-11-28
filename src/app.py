@@ -25,14 +25,14 @@ def login():
 
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
-    cursor.execute("SELECT employeeName, password FROM employee WHERE employeeID = %s AND password = %s", (employee_id, password))
+    cursor.execute("SELECT employeeName, employeeRank, password FROM employee WHERE employeeID = %s AND password = %s", (employee_id, password))
     employee = cursor.fetchone()
 
     cursor.close()
     conn.close()
 
     if employee:
-        return jsonify({'message': f'Welcome {employee[0]}'}), 200
+        return jsonify({'message': f'Welcome {employee[0]}', 'employeeRank': employee[1]}), 200
     else:
         return jsonify({'message': 'Invalid login credentials'}), 401
 @app.route('/change-password', methods=['POST'])
