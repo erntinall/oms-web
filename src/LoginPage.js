@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css'; // import css of page
+import { useAuth } from './AuthContext';
 
 const LoginPage = () => {
   const [employeeID, setEmployeeID] = useState(''); // State to hold employeeID
@@ -12,6 +13,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState('');
+  const { loginUser } = useAuth();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -22,9 +25,11 @@ const LoginPage = () => {
     }
     try {
       const response = await axios.post('http://3.130.252.18:5000/login', { employeeID, password });
-      if (response.status === 200){
-	console.log('Login successful:', response.data.message);
-        navigate('/main', {state: {welcomeMessage: response.data.message}});
+      if (response.status === 200) {
+        loginUser({ role: response.data.employeeRank});
+        console.log('Login successful:', response.data.message);
+        // Pass the role in the navigate state
+        navigate('/main', { state: { welcomeMessage: response.data.message}});
         setIsLoggedIn(true);
       }
     } catch (error) {

@@ -10,25 +10,27 @@ import Products from './Products.js';
 import Suppliers from './Suppliers.js';
 import Employees from './Employees.js';
 import Payments from './Payments.js';
-
+import { AuthProvider } from './AuthContext';
 
 function App() {
   return (
-    <Router>
-	<Routes>
-	  <Route path="/login" exact element={<LoginPage />} />
-	  <Route path="/main" exact element={<MainPage />} />
-	  <Route path="/orders" element={<Orders />} />
-	  <Route path="/shipments" element={<Shipments />} />
-	  <Route path="/inventory" element={<Inventory />} />
-	  <Route path="/customers" element={<Customers />} />
-	  <Route path="/products" element={<Products />} />
-	  <Route path="/suppliers" element={<Suppliers />} />
-	  <Route path="/employees" element={<Employees />} />
-	  <Route path="/payments" element={<Payments />} />
-	  <Route path="/" element={<LoginPage />} />
-	</Routes>
-    </Router>
+	<AuthProvider>
+		<Router>
+		<Routes>
+		<Route path="/login" exact element={<LoginPage />} />
+		<Route path="/main" exact element={<MainPage />} />
+		<Route path="/orders" element={<Orders />} />
+		<Route path="/shipments" element={<Shipments />} />
+		<Route path="/inventory" element={<Inventory />} />
+		<Route path="/customers" element={<Customers />} />
+		<Route path="/products" element={<Products />} />
+		<Route path="/suppliers" element={<Suppliers />} />
+		<Route path="/employees" element={<Employees />} />
+		<Route path="/payments" element={<Payments />} />
+		<Route path="/" element={<LoginPage />} />
+		</Routes>
+		</Router>
+	</AuthProvider>
   );
 }
 
