@@ -16,7 +16,6 @@ function Navigation({ welcomeMessage, role }) {
             <li><NavLink to="/inventory">Inventory</NavLink></li>
             <li><NavLink to="/shipments">Shipments</NavLink></li>
             <li><NavLink to="/suppliers">Suppliers</NavLink></li>
-            <li><NavLink to="/sales-channels">Sales Channels</NavLink></li>
 
             {/* Visible only to Managers */}
             {isManager && <li><NavLink to="/customers">Customers</NavLink></li>}
