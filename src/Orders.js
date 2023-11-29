@@ -236,7 +236,7 @@ function formatAmount(amount){
 function formatDate(dateString) {
 	const options = { year: 'numeric', month: 'long', day: 'numeric' }; // Adjust according to your needs
 	return new Date(dateString).toLocaleDateString(undefined, options);
-  }
+}
 
 export default Orders;
 
