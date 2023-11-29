@@ -362,6 +362,124 @@ def delete_order(order_id):
         if cursor: cursor.close()
         if conn: conn.close()
 
+@app.route('/shipments', methods=['POST'])
+def add_shipment():
+    data = request.get_json()
+    order_id = data.get('orderID')
+    shipment_date = data.get('shipmentDate')
+    tracking = data.get('tracking')
+
+    if not order_id or not shipment_date or not tracking: return jsonify({'message': 'All fields are required'}), 400
+    
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT orderID FROM orders WHERE orderID = %s", (order_id,))
+        if not cursor.fetchone(): return jsonify({'message': 'Order ID not found'}), 404
+        cursor.execute("INSERT INTO shipment (orderID, shipmentDate, tracking) VALUES (%s, %s, %s)", (order_id, shipment_date, tracking))
+        conn.commit()
+        return jsonify({'message': 'Shipment added successfully', 'shipmentID': cursor.lastrowid}), 201
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/shipment/<int:shipment_id>', methods=['PUT'])
+def update_shipment(shipment_id):
+    data = request.get_json()
+    order_id = data.get('orderID')
+    shipment_date = data.get('shipmentDate')
+    tracking = data.get('tracking')
+
+    if not order_id or not shipment_date or not tracking: return jsonify({'message': 'All fields are required'}), 400
+    
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("UPDATE shipment SET orderID = %s, shipmentDate = %s, tracking = %s WHERE shipmentID = %s", (order_id, shipment_date, tracking, shipment_id))
+        conn.commit()
+        if cursor.rowcount == 0: return jsonify({'message': 'Shipment not found'}), 404
+        return jsonify({'message': 'Shipment updated successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/shipment/<int:shipment_id>', methods=['DELETE'])
+def delete_shipment(shipment_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM shipment WHERE shipmentID = %s", (shipment_id,))
+        conn.commit()
+
+        if cursor.rowcount == 0: return jsonify({'message': 'Shipment not found'}), 404
+
+        return jsonify({'message': 'Shipment deleted successfully'}), 200
+
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/suppliers', methods=['POST'])
+def add_supplier():
+    data = request.get_json()
+    name = data.get('supplierName')
+    contact_info = data.get('contactInfo')
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("INSERT INTO supplier (supplierName, contactInfo) VALUES (%s, %s)", (name, contact_info))
+        conn.commit()
+        return jsonify({'message': 'Supplier added successfully', 'supplierID': cursor.lastrowid}), 201
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+@app.route('/suppliers/<int:supplier_id>', methods=['PUT'])
+def update_supplier(supplier_id):
+    data = request.get_json()
+    name = data.get('supplierName')
+    contact_info = data.get('contactInfo')
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("UPDATE supplier SET supplierName = %s, contactInfo = %s WHERE supplierID = %s", (name, contact_info, supplier_id))
+        conn.commit()
+
+        if cursor.rowcount == 0: return jsonify({'message': 'Supplier not found'}), 404
+        return jsonify({'message': 'Supplier updated successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/suppliers/<int:supplier_id>', methods=['DELETE'])
+def delete_supplier(supplier_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM supplier WHERE supplierID = %s", (supplier_id,))
+        conn.commit()
+
+        if cursor.rowcount == 0: return jsonify({'message': 'Supplier not found'}), 404
+        return jsonify({'message': 'Supplier deleted successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
