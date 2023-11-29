@@ -35,3 +35,16 @@
 .add-item-form button:hover {
   background-color: #4cae4c;
 }
+
+.add-item-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  flex-grow: 1;
+  background-color: white; /* If you want to specify a background */
+}
+
+.add-item-form option {
+  padding: 10px; /* Adjust as needed */
+}

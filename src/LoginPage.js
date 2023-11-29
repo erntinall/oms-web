@@ -12,8 +12,6 @@ const LoginPage = () => {
   const [error, setError] = useState(''); // State to hold the error message
   const navigate = useNavigate();
   const [isChangingPassword, setIsChangingPassword] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState('');
   const { loginUser } = useAuth();
 
   const handleLogin = async (event) => {
@@ -30,7 +28,6 @@ const LoginPage = () => {
         console.log('Login successful:', response.data.message);
         // Pass the role in the navigate state
         navigate('/main', { state: { welcomeMessage: response.data.message}});
-        setIsLoggedIn(true);
       }
     } catch (error) {
       if (error.response) {
