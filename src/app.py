@@ -100,17 +100,6 @@ def get_order(order_id):
         return jsonify(order)
     else:
         return jsonify({'message': 'Order not found'}), 404
-@app.route('/order/<int:order_id>', methods=['PUT'])
-def update_order_status(order_id):
-    data = request.get_json()
-    new_status = data['status']
-    conn = mysql.connector.connect(**config)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE orders SET status = %s WHERE orderID = %s", (new_status, order_id))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return jsonify({'message': 'Order status updated'}), 200
 @app.route('/shipments', methods=['GET'])
 def get_shipments():
     conn = mysql.connector.connect(**config)
@@ -317,6 +306,61 @@ def delete_inventory_item(inventory_id):
     finally:
         cursor.close()
         conn.close()
+@app.route('/orders', methods=['POST'])
+def add_order():
+    data = request.get_json()
+    employee_id = data.get('employeeID')
+    customer_id = data.get('customerID')
+    amount = data.get('amount')
+    status = data.get('status')
+    order_date = data.get('orderDate')
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO orders (employeeID, customerID, amount, status, orderDate) VALUES (%s, %s, %s, %s, %s)",(employee_id, customer_id, amount, status, order_date))
+        conn.commit()
+        return jsonify({'message': 'Order added successfully', 'orderID': cursor.lastrowid}), 201
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/order/<int:order_id>', methods=['PUT'])
+def update_order(order_id):
+    data = request.get_json()
+    employee_id = data.get('employeeID')
+    customer_id = data.get('customerID')
+    amount = data.get('amount')
+    status = data.get('status')
+    # Note: orderDate is not updated, as it should remain the creation date
+
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("UPDATE orders SET employeeID = %s, customerID = %s, amount = %s, status = %s WHERE orderID = %s",(employee_id, customer_id, amount, status, order_id))
+        conn.commit()
+        if cursor.rowcount == 0: return jsonify({'message': 'Order not found'}), 404
+        return jsonify({'message': 'Order updated successfully'}), 200
+    except mysql.connector.Error as err: return jsonify({'message': str(err)}), 500
+    finally: cursor.close(); conn.close();
+
+@app.route('/order/<int:order_id>', methods=['DELETE'])
+def delete_order(order_id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM orders WHERE orderID = %s", (order_id,))
+        conn.commit()
+        if cursor.rowcount == 0: return jsonify({'message': 'No order found with given ID'}), 404
+        else: return jsonify({'message': 'Order deleted successfully'}), 200
+    except Exception as e: return jsonify({'message': str(e)}), 500
+    finally: 
+        if cursor: cursor.close()
+        if conn: conn.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
